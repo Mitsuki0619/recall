@@ -114,6 +114,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@biomejs/biome':
+        specifier: ^1.9.4
+        version: 1.9.4
       react:
         specifier: ^18.2.0
         version: 18.2.0

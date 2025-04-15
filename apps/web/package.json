@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "biome lint ./",
     "lint:fix": "biome lint --write ./",
-    "format": "biome format --write ./",
-    "check": "biome check ./"
+    "fmt": "biome format --write ./",
+    "check": "biome check ./",
+    "check:fix": "biome check --fix ./"
   },
   "dependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -26,8 +27,5 @@
     "@types/react-dom": "^18.2.18",
     "babel-plugin-react-native-web": "^0.19.10",
     "typescript": "5.5.4"
-  },
-  "biome": {
-    "configPath": "../../biome.json"
   }
 }
