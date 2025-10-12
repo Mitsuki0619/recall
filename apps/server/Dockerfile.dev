@@ -1,7 +1,8 @@
 FROM golang:1.25-alpine
 
-# Install Air for hot reloading
+# Install development tools
 RUN go install github.com/air-verse/air@latest
+RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 # Set working directory
 WORKDIR /app
