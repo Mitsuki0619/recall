@@ -1,9 +1,31 @@
-.PHONY: help dev build clean test docker-up docker-down docker-restart docker-logs
+.PHONY: help init reset dev build clean test docker-up docker-down docker-restart docker-logs
 
 # Default target
 help: ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
+
+# Environment setup
+init: ## Initialize development environment (first time setup)
+	@echo "🚀 Initializing development environment..."
+	@if [ ! -f .env ]; then \
+		echo "📝 Creating .env from .env.example..."; \
+		cp .env.example .env; \
+	fi
+	docker-compose build
+	docker-compose up -d
+	@echo "⏳ Waiting for app container to be ready..."
+	docker-compose exec app go mod download
+	@echo "✅ Environment ready! Access at http://localhost:8080"
+	@echo "📋 Use 'make logs' to see application logs"
+
+reset: ## Reset entire environment (clean slate)
+	@echo "🧹 Resetting development environment..."
+	docker-compose down -v
+	docker system prune -f
+	docker volume prune -f
+	@echo "🚀 Rebuilding from scratch..."
+	$(MAKE) init
 
 # Development (Docker-based)
 dev: docker-up ## Start development environment with hot reload in Docker
