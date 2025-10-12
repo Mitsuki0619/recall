@@ -1,137 +1,108 @@
-# Turborepo starter
+# 🧠 Recall - エンジニア向けドキュメント学習支援アプリ
 
-This Turborepo starter is maintained by the Turborepo core team.
+エンジニアが日々読む公式ドキュメントや技術記事（Zenn・Qiita・Mediumなど）を、リーディングリストとして保存・整理し、各記事にMarkdownでメモを残せるアプリ。さらに、保存した記事やメモ内容をもとにAIが自動で復習問題を生成し、学習内容の定着を支援する。
 
-## Using this example
+## ✨ 主な機能
 
-Run the following command:
+- 📝 **記事管理**: URL入力による記事登録とOGP自動取得
+- 🏷️ **タグ管理**: タグ・カテゴリによる記事の整理
+- 📖 **Markdownメモ**: 記事ごとに複数のMarkdownメモを作成・編集
+- 🤖 **AI復習問題**: メモ内容を元にOpenAI APIが自動で復習問題を生成
+- 🔍 **検索・フィルタ**: タイトル・URL・タグ・メモ内容での検索
+- 🔐 **認証**: Supabase AuthによるSSO対応（Google・GitHub・LINE・X）
 
-```sh
-npx create-turbo@latest
-```
+## 🏗️ 技術構成
 
-## What's inside?
+| 項目           | 技術・サービス                                       |
+| -------------- | ---------------------------------------------------- |
+| フロントエンド | React（Next.js）・Expo（React Native）               |
+| API形式        | GraphQL                                              |
+| バックエンド   | AWS Lambda（Go製 GraphQL API）                       |
+| API管理        | AWS API Gateway                                      |
+| 認証           | Supabase Auth（SSO対応：Google / GitHub / LINE / X） |
+| データベース   | Supabase PostgreSQL                                  |
+| ストレージ     | Amazon S3（OGPキャッシュ・画像アップロード等）       |
+| AI連携         | OpenAI API（問題生成）                               |
+| デプロイ       | AWS SAM / Serverless Framework                       |
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 📁 プロジェクト構成
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+recall/
+├── apps/
+│   ├── mobile/         # Expo React Native アプリ
+│   └── web/            # Next.js Webアプリ
+├── packages/           # 共通パッケージ
+├── docs/               # 設計ドキュメント
+│   ├── 要件定義.md
+│   ├── DBテーブル設計.md
+│   └── 画面設計/
+└── README.md
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 🚀 開発開始
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### 前提条件
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+- Node.js 18以上
+- pnpm 9.0.0以上
 
-### Develop
+### セットアップ
 
-To develop all apps and packages, run the following command:
+```bash
+# 依存関係のインストール
+pnpm install
 
-```
-cd my-turborepo
+# 全アプリの開発サーバー起動
+pnpm dev
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# 特定のアプリのみ起動
+pnpm dev --filter=web
+pnpm dev --filter=mobile
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### ビルド
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+```bash
+# 全アプリのビルド
+pnpm build
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+# 特定のアプリのみビルド
+pnpm build --filter=web
 ```
 
-### Remote Caching
+### その他のコマンド
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+```bash
+# リント実行
+pnpm lint
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+# リント自動修正
+pnpm lint:fix
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+# フォーマット実行
+pnpm fmt
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# 型チェック
+pnpm check-types
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## 📚 ドキュメント
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+詳細な設計資料は `docs/` ディレクトリを参照してください：
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
+- [要件定義](./docs/要件定義.md)
+- [DBテーブル設計](./docs/DBテーブル設計.md)
+- [画面設計](./docs/画面設計/)
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
+## 🎯 想定ユーザー
 
-## Useful Links
+- 学習中の学生エンジニア
+- 若手エンジニア・キャリア初期層
+- 日々ドキュメントや記事を読む実務エンジニア
 
-Learn more about the power of Turborepo:
+## 💡 提供価値
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
-# next-expo-starter
-# recall
+- 技術記事を保存し、メモと共に体系的に学べる
+- AIによる復習で理解度を測定・強化できる
+- 自分だけの「技術知識ベース」を構築可能
